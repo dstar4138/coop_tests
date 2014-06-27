@@ -1,0 +1,4 @@
+deps
+*.ex
+*.log
+*.pdf
