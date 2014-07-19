@@ -4,23 +4,24 @@
 //  synchronizing on a share channel. The provided secondary process is only
 //  a consumer to take and process the event.
 //
-let X = 10 in // Number of events to consume before quiting.
-let H = 20 in // Max number of seconds to wait for an event.
-let L = 1  in // Min number of seconds to wait for an event.
+fun X, // Number of events to consume before quiting.
+    H, // Max number of seconds to wait for an event.
+    L. // Min number of seconds to wait for an event.
+(
+    // Event Channel
+    let chan = newchan in
 
-// Event Channel
-let chan = newchan in
+    // User
+    let get_event = fun c.(ignore (hang (add L (rand (sub H L))))  
+                                  (swap chan c)) in
+    let user_t = fun start,_.(omega fun f,c.(
+                        if (leq c 0) (swap chan nil)
+                                     (ignore (get_event c)
+                                             (f f (dec c))))
+                              start)
+    in
+    let _ = (spawn (user_t X)) in
 
-// User
-let get_event = fun c.(ignore (hang (add L (rand (sub H L))))  
-                              (swap chan c)) in
-let user_t = fun start,_.(omega fun f,c.(
-                    if (leq c 0) (swap chan nil)
-                                 (ignore (get_event c)
-                                         (f f (dec c))))
-                          start)
-in
-let _ = (spawn (user_t X)) in
-
-// Consumer/MAIN
-(omega fun f.(if (swap chan nil) (f f) 1))
+    // Consumer/MAIN
+    (omega fun f.(if (swap chan nil) (f f) 1))
+)

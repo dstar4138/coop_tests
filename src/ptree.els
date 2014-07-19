@@ -5,38 +5,39 @@
 //  They do this X times before stopping. (NOTE: M must be even for all
 //  communications to have a chance to succeed).
 //
-let N = 2  in  // Number of Work-Sets (Try 1 to #LPU's on your system or more)
-let M = 10 in  // Number of Members per Work-Set (Try 2 to 20)
-let X = 10 in  // Number of times members should synch (Enough for good data)
-let C = 50 in  // Max number of Chugs (Compiler implementation limit is 256)
+fun N, // Number of Work-Sets (Try 1 to #LPU's on your system or more)
+    M, // Number of Members per Work-Set (Try 2 to 20)
+    X, // Number of times members should synch (Enough for good data)
+    C. // Max number of Chugs (Compiler implementation limit is 256)
+(
+    // Worker:
+    let rchug = fun n.(chug (rand n)) in
+    let run_round = fun chan.(let _ = (rchug C) in (swap chan nil)) in
+    let worker = fun setchan.(omega fun f,counter.(
+                                            //let _ = (printl counter) in //DEBUG
+                                            (if (leq counter 0) 1
+                                                (ignore (run_round setchan)
+                                                        (f f (dec counter))))))
+    in
+     
+    // Work-Set Manager
+    let gen_workset = fun groupchan.(omega fun f,counter.(
+                                     let worker_t = (fun _.(worker groupchan X)) in
+                                     (if (leq counter 1) 
+                                          (worker_t nil)
+                                          (merge (fun _.(f f (dec counter)))
+                                                 worker_t
+                                                 ignore))
+                                    ))
+    in
+    let workerset_t = fun _.(gen_workset newchan M) in
+    let server = (omega fun f,counter.(
+                            if (leq counter 1) 
+                               (workerset_t nil)
+                               (merge (fun _.(f f (dec counter)))
+                                      workerset_t 
+                                      ignore)))
 
-// Worker:
-let rchug = fun n.(chug (rand n)) in
-let run_round = fun chan.(let _ = (rchug C) in (swap chan nil)) in
-let worker = fun setchan.(omega fun f,counter.(
-                                        //let _ = (printl counter) in //DEBUG
-                                        (if (leq counter 0) 1
-                                            (ignore (run_round setchan)
-                                                    (f f (dec counter))))))
-in
- 
-// Work-Set Manager
-let gen_workset = fun groupchan.(omega fun f,counter.(
-                                 let worker_t = (fun _.(worker groupchan X)) in
-                                 (if (leq counter 1) 
-                                      (worker_t nil)
-                                      (merge (fun _.(f f (dec counter)))
-                                             worker_t
-                                             ignore))
-                                ))
-in
-let workerset_t = fun _.(gen_workset newchan M) in
-let server = (omega fun f,counter.(
-                        if (leq counter 1) 
-                           (workerset_t nil)
-                           (merge (fun _.(f f (dec counter)))
-                                  workerset_t 
-                                  ignore)))
-
-// MAIN
-in (if (leq N 1) (workerset_t N) (server N))
+    // MAIN
+    in (if (leq N 1) (workerset_t N) (server N))
+)

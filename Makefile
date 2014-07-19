@@ -7,7 +7,7 @@ ERLAM_URL='https://github.com/dstar4138/erlam.git'
 ELS=$(CURDIR)/deps/erlam/bin/els
 
 # Directory Structure
-RUN_ALL_TESTS=$(CURDIR)/bin/run_all.escript
+RUN_ALL_TESTS=$(CURDIR)/bin/run_all.py
 SRC_DIR=$(CURDIR)/src
 OUT_DIR=$(CURDIR)/results
 
@@ -15,13 +15,9 @@ OUT_DIR=$(CURDIR)/results
 
 all: deps tests
 
-run: 
+run: all 
 	-mkdir $(OUT_DIR)
 	$(RUN_ALL_TESTS) $(SRC_DIR) $(OUT_DIR)
-
-run-png:
-	-mkdir $(OUT_DIR)
-	$(RUN_ALL_TESTS) --png $(SRC_DIR) $(OUT_DIR)
 
 deps:
 	mkdir deps
@@ -33,7 +29,7 @@ tests:
 	chmod +x src/*.ex
 
 clean:
-	-rm src/*.els
+	-rm src/*.ex
 
 distclean: clean
 	-rm -rf deps
