@@ -1,0 +1,33 @@
+// <__GENERATED__> SEE bin/gen_interactivity.py FOR DETAILS <__GENERATED__>
+// 
+// Un-structured Cooperativity #1
+//
+//      Generates a set of work-groups and a set of cluster comms. This should
+//      give a good indication of how a scheduler handles obvious cooperativity,
+//      at the same time as not-so-obvious.
+//
+
+fun X, // Number of Work-Groups
+    Y. // Number of Processes in ClusterComm
+(
+    // IMPORTED FUNCTION DEFINITIONS
+    let ptree = (
+{{{ptree.els}}}
+        ) in
+    let clustercomm = (
+{{{clustercomm.els}}}
+        ) in
+
+    // Constants
+    let num_chugs = 20 in
+    let num_procs = 5  in
+    let num_syncs = 10 in
+    let num_comms = (div Y 2) in
+
+    // Spawn X Work Groups and Y ClusterComm children
+    //  - Wait for all to finish before returning.
+    (merge (fun _.(ptree X num_procs num_syncs num_chugs))
+           (fun _.(clustercomm Y num_comms num_syncs))
+           ignore)
+) 
+        
