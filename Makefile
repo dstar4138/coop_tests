@@ -6,6 +6,9 @@
 ERLAM_URL='https://github.com/dstar4138/erlam.git'
 ELS=$(CURDIR)/deps/erlam/bin/els
 
+# Dynamic Scripts:
+COMPOSE=$(CURDIR)/bin/compose_els.py
+
 # Directory Structure
 RUN_ALL_TESTS=$(CURDIR)/bin/run_all.py
 SRC_DIR=$(CURDIR)/src
@@ -24,7 +27,7 @@ deps:
 	cd deps ; git clone $(ERLAM_URL)
 	cd deps/erlam ; make
 
-tests:
+tests: build_compose
 	$(ELS) src/*.els
 	chmod +x src/*.ex
 
@@ -35,3 +38,6 @@ distclean: clean
 	-rm -rf deps
 	-rm -r $(OUT_DIR)
 
+build_compose:
+	$(COMPOSE) $(SRC_DIR) ./bin/interactivity.els_tmp $(SRC_DIR)/interactivity.els
+	$(COMPOSE) $(SRC_DIR) ./bin/unstructured1.els_tmp $(SRC_DIR)/unstructured1.els
