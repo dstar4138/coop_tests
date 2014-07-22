@@ -39,5 +39,6 @@ distclean: clean
 	-rm -r $(OUT_DIR)
 
 build_compose:
+	$(COMPOSE) $(SRC_DIR) ./bin/ptree.els_tmp $(SRC_DIR)/ptree.els
 	$(COMPOSE) $(SRC_DIR) ./bin/interactivity.els_tmp $(SRC_DIR)/interactivity.els
 	$(COMPOSE) $(SRC_DIR) ./bin/unstructured1.els_tmp $(SRC_DIR)/unstructured1.els

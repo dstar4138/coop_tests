@@ -187,7 +187,7 @@ def ptree_tests():
     """
     test_name = "ptree-modN"
     test_range = []
-    default="%d,10,10,5" # Default for batch size, synch count, chug count
+    default="%d,10,10" # Default for batch size, synch count
     for num_lpu in range(1, mp.cpu_count()+2): 
         test_range.append( default % num_lpu )
     tests.append( (test_def, test_name, script, test_range) ) 
