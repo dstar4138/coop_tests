@@ -6,3 +6,5 @@ deps
 # Our dynamically generated scripts should not be saved.
 interactivity.els
 unstructured1.els
+unstructured2.els
+ptree.els

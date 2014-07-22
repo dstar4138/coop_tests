@@ -1,0 +1,31 @@
+// <__GENERATED__> SEE bin/compose_els.py FOR DETAILS <__GENERATED__>
+// 
+// Un-structured Cooperativity #2
+//
+//      Generates a PRing of size X and a single work-group via a ClusterComm
+//      of size Y. This gives another example of unstructured vs structured
+//      behaviour, which was pointed out as a weakness in some schedulers. 
+//
+
+fun X, // Number of Processes in PRing (>1)
+    Y, // Number of Processes in ClusterComm
+    S. // Number of times for any process to synchronize MUST be leq X.
+(
+    // IMPORTED FUNCTION DEFINITIONS
+    let pring = (
+{{{pring.els}}}
+        ) in
+    let clustercomm = (
+{{{clustercomm.els}}}
+        ) in
+
+    // Constants
+    let num_loops = (div S X) in
+
+    // Spawn X procs in PRing and Y ClusterComm children
+    //  - Wait for all to finish before returning.
+    (merge (fun _.(pring X num_loops 5))
+           (fun _.(clustercomm Y 1 S))
+           ignore)
+) 
+ 

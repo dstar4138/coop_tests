@@ -33,7 +33,7 @@ fun N, // Number of Processes in the system.
     let finish = fun _.(omega fun f.(let r = (swap win_chan nil) 
                                      in (if (is_chan r) 
                                             (swap r 1) 
-                                            (ignore (rchug 25) (f f))))) in
+                                            (ignore (rchug 5) (f f))))) in
     let worker_t = fun _.(omega fun f,c.(if (leq c 0) (finish nil)
                                             (ignore (rswap 0) (f f (dec c)))) X) 
     in

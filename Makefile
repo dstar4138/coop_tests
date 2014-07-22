@@ -32,13 +32,21 @@ tests: build_compose
 	chmod +x src/*.ex
 
 clean:
+	-rm *.log
 	-rm src/*.ex
 
-distclean: clean
+distclean: clean clean_compose
 	-rm -rf deps
-	-rm -r $(OUT_DIR)
+	@echo "You need to hand delete results directory, for sanity check."
 
 build_compose:
 	$(COMPOSE) $(SRC_DIR) ./bin/ptree.els_tmp $(SRC_DIR)/ptree.els
 	$(COMPOSE) $(SRC_DIR) ./bin/interactivity.els_tmp $(SRC_DIR)/interactivity.els
 	$(COMPOSE) $(SRC_DIR) ./bin/unstructured1.els_tmp $(SRC_DIR)/unstructured1.els
+	$(COMPOSE) $(SRC_DIR) ./bin/unstructured2.els_tmp $(SRC_DIR)/unstructured2.els
+
+clean_compose:
+	-rm $(SRC_DIR)/ptree.els
+	-rm $(SRC_DIR)/interactivity.els
+	-rm $(SRC_DIR)/unstructured1.els
+	-rm $(SRC_DIR)/unstructured2.els
