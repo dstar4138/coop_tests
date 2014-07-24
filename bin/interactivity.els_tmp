@@ -23,7 +23,7 @@ fun X, // Number of UserInput processes to spawn.
     let ui_l = (omega fun f,c.(if (leq c 1) 
                                   (ui_t nil)
                                   (merge ui_t
-                                         (f f (dec n))
+                                         (f f (dec c))
                                          ignore)))
 
     // Spawn X User inputs and Y computational-bound processes

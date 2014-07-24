@@ -17,14 +17,16 @@ fun N, // Ring size in number of processes.
                  let _    = (chug C)             in
                  let dead = (eq kill_token recv) in
                  let _ = (swap lside recv)       in
-                     if dead (printl 1) (f f)))
+                     if dead nil //(printl 1) 
+                             (f f)))
 
     // Parent node which will count the loops.
     in let pnode = fun rside,lside.(omega fun f,c.(
                      let recv = (swap rside nil)                    in
                      let dead = (eq c L)                            in
                      let _ = (swap lside (if dead kill_token recv)) in
-                         if dead (printl 1) (f f (inc c)))) 
+                         if dead nil //(printl 1) 
+                                 (f f (inc c)))) 
 
     // Start the Parent node after starting the token passing.
     in let start_pnode = fun rside,lside.(
